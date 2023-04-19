@@ -22,14 +22,15 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'overview',
-      title: 'Overview',
-      type: 'blockContent',
+      name: 'category',
+      title: 'Category',
+      type: 'array',
+      of: [{type: 'reference', to: {type: 'category'}}],
     }),
     defineField({
       name: 'releaseDate',
       title: 'Release date',
-      type: 'datetime',
+      type: 'date',
     }),
     defineField({
       name: 'poster',
@@ -40,46 +41,41 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'externalId',
-      title: 'External ID',
-      type: 'number',
+      name: 'backdrop_poster',
+      title: 'Large Poster Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
     }),
     defineField({
-      name: 'popularity',
-      title: 'Popularity',
-      type: 'number',
+      name: 'director',
+      title: 'Directed By',
+      type: 'string',
     }),
     defineField({
-      name: 'castMembers',
-      title: 'Cast Members',
+      name: 'genres',
+      title: 'Genres',
+      type: 'string',
+    }),
+    defineField({
+      name: 'original_language',
+      title: 'original language',
+      type: 'string',
+      initialValue: 'en',
+    }),
+    defineField({
+      name: 'adult',
+      title: 'adult',
+      initialValue: false,
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'selected_seat',
+      title: 'selected seat',
+      initialValue: [],
       type: 'array',
-      of: [{type: 'castMember'}],
-    }),
-    defineField({
-      name: 'crewMembers',
-      title: 'Crew Members',
-      type: 'array',
-      of: [{type: 'crewMember'}],
+      of: [{type: 'string'}],
     }),
   ],
-  preview: {
-    select: {
-      title: 'title',
-      date: 'releaseDate',
-      media: 'poster',
-      castName0: 'castMembers.0.person.name',
-      castName1: 'castMembers.1.person.name',
-    },
-    prepare(selection) {
-      const year = selection.date && selection.date.split('-')[0]
-      const cast = [selection.castName0, selection.castName1].filter(Boolean).join(', ')
-
-      return {
-        title: `${selection.title} ${year ? `(${year})` : ''}`,
-        date: selection.date,
-        subtitle: cast,
-        media: selection.media,
-      }
-    },
-  },
 })
